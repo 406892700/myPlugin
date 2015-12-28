@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/slide.css">
+    <script type="text/javascript" src="../jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="./js/jquery.slide.js"></script>
+</head>
+<body>
+    <div class="wrap" style="width:950px;">
+    	<div class="slide"></div>
+    	<!-- 图片轮播 -->
+    </div>
+
+	<script type="text/javascript">
+        $(function(){
+            $('.slide').slide({
+                obj:[{
+                    img:'./images/slide3.jpg',
+                    url:'#',
+                    alt:'逗比1'
+                },
+                {
+                    img:'./images/slide1.jpg',
+                    url:'#',
+                    alt:'逗比2'
+                },
+                {
+                    img:'./images/slide2.jpg',
+                    url:'#',
+                    alt:'逗比3'
+                }
+                ,
+                {
+                    img:'./images/slide2.jpg',
+                    url:'#',
+                    alt:'逗比3'
+                }
+                ,
+                {
+                    img:'./images/slide2.jpg',
+                    url:'#',
+                    alt:'逗比3'
+                }],
+                frequency:3000//出发自动滑动的时间间隔
+            });
+        });
+	</script>
+</body>
+</html>

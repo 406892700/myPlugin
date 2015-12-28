@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html style="height:100%">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>滑动条</title>
+    <link rel="stylesheet" href="somePlugin/spinner/spinner/spinner.css"/>
+</head>
+<body style="height:100%;">
+    <div id="wrap">
+    </div>
+    <script src="javascripts/jquery.min.js"></script>
+    <script src="somePlugin/spinner/spinner/jquery.spinner.js"></script>
+<script>
+    $(function () {
+        $.xSlide({
+            elem:$('#wrap'),//外容器
+            pri_val:'30%',//初始值 30% 或者 0.3都可以
+            length:3//保留几位小数
+        },function(val){//回调函数（val就是当前的值）
+            //可以在这里进行你要的操作
+            console.log(val);
+        });
+    })
+</script>
+</body>
+</html>

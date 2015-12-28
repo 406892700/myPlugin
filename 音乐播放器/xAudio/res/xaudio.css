@@ -1,0 +1,52 @@
+.x_audio > .left_icon{
+    width: 30px;
+    float: left;
+    height: 30px;
+}
+
+.x_audio > .left_icon a{
+    display: block;
+    width:30px;
+    height: 30px;
+    background: url('./play.png') no-repeat 0 0;
+    background-size: cover;
+}
+
+.x_audio > .left_icon a.pause{
+    background: url('./pasue.png') no-repeat 0 0;
+    background-size: cover;
+}
+
+
+.x_audio > .right_progress{
+    margin-left: 35px;
+    height: 30px;
+    position: relative;
+}
+
+.x_audio > .right_progress > .pro_bar{
+    position: absolute;
+    height: 10px;
+    width: 100%;
+    background-color: #eeeeee;
+    border-radius: 5px;
+    top:50%;
+    margin-top:-5px;
+}
+
+.x_audio > .right_progress > a{
+    position: absolute;
+    width:20px;
+    height:20px;
+    left:0px;
+    top:5px;
+    background: url('./circle.png') no-repeat 0 0;
+    background-size: cover;
+}
+
+.x_audio > .x_time{
+    clear: both;
+    text-align: right;
+    color:#999999;
+    font-size:1.6rem;
+}

@@ -1,0 +1,27 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>图片轮播</title>
+    <link rel="stylesheet" type="text/css" href="./css/tips.css">
+    <script type="text/javascript" src="./js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="./js/jquery.tips.js"></script>
+    <script type="text/javascript">
+    	$(function(){
+    		$.tips({
+				width:500,//宽
+				height:400,//高
+				close:true,//是否需要关闭按钮
+				dnd:true,//是否可以拖动
+				mask:true//是否需要遮罩层
+			},'./',function(data){
+				console.log(data);
+			});
+    	});
+    </script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ch-ZN"  ng-app="inviteApp">
+<head>
+	<meta charset="UTF-8">
+	<title>让您的幼儿园更上一层楼</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+	<link rel="stylesheet" href="html5/canvasUpLoad/css/mobile-console.min.css">
+	<script type="text/javascript" src="html5/canvasUpLoad/js/jquery-1.8.3.min.js"></script>
+	<script src="html5/canvasUpLoad/js/mobile-console.min.js"></script>
+</head>
+<!-- ontouchmove="event.preventDefault()" -->
+<body >
+	<style type="text/css">
+		.canvas{
+			border:1px solid #aaa;
+			cursor:move;
+			background-position: 0px 0px;
+			-webkit-transition: backgroundSize 0.5s;
+			-moz-transition: backgroundSize 0.5s;
+			-ms-transition: backgroundSize 0.5s;
+			-o-transition: backgroundSize 0.5s;
+			transition: backgroundSize 0.5s;
+		}
+
+		.wrap{
+			border:1px solid #d00000;
+			position: relative;
+			/*width: 600px;*/
+			height: 400px;
+			width: 100%;
+		}
+
+		.wrap > img{
+			width: 100%;
+		}
+
+		.btn_submit{
+			display: inline-block;
+			width: 200px;
+			height: 35px;
+			border-radius: 5px;
+			color:#fff;
+			font-size: 16px;
+			line-height: 35px;
+			text-align: center;
+			background-color: #0078d8;
+			text-decoration: none;
+		}
+
+		.loading{
+			width:25px;
+			height: 25px;
+			background: url('html5/canvasUpLoad/images/07.gif') no-repeat 0 0;
+			background-size: 25px 25px;
+			position: absolute;
+			left:50%;
+			top:50%;
+			margin-left: -12px;
+			margin-top: -12px;
+		}
+	</style>
+	<canvas class="canvas" width="300" height="300">
+		
+	</canvas>
+
+	<canvas class="preview" width="300" height="300" style="border:1px solid #Aaa;">
+		
+	</canvas>
+	<div class="aree">
+		<button class="add_min" onclick="resize('+')">+</button>
+		<button class="add_min" onclick="resize('-')">-</button>
+	</div>
+	<!-- <div class="wrap" id="preview">
+		
+	</div> -->
+
+<!-- 	<div class="log">
+		
+	</div>
+
+	<div class="log1">
+		
+	</div> -->
+
+	<input type="file" id="file">
+
+	<a href="javascript:void(0)" class="btn_submit">确定</a>
+
+	<script type="text/javascript">
+		mobileConsole.show();
+
+		// var getPicSize = function(src){//获取图片的原始尺寸
+		// 	var iframe = document.createElement('iframe');
+		// 	iframe.className = 'iframe';
+		// 	var img = new Image();
+		// 	img.src = src;
+
+			
+		// 	document.body.appendChild(iframe);
+		// 	iframe.contentDocument.body.appendChild(img);
+		// 	var size = {
+		// 		width:window.getComputedStyle(img)['width'],
+		// 		height:window.getComputedStyle(img)['height']
+		// 	}
+
+		// 	// img.onload = function(){
+		// 	// 	alert(1);
+		// 	// }
+
+		// 	console.log(size);
+
+		// 	document.body.removeChild(iframe);
+
+		// 	return img;
+		// 	//return size;
+		// }
+		// -------然并卵-----------
+
+		$(function(){
+			var file = document.querySelector('#file');
+			var src;
+			file.onchange = function(evt){
+				var idt = evt.target.files[0];
+				if(!evt.target.files[0]){
+					return;
+				}
+				if(!/image\/\w+/.test(idt.type)){
+					console.log('请上传图片！');
+					return;
+				}
+
+				var reader = new FileReader();
+
+				reader.readAsDataURL(idt);
+				reader.onload = function(evt){
+
+					img.src = this.result;
+					src = this.result;
+					$('#preview .loading').remove();
+					//var size = getPicSize(src);
+					//var img = getPicSize(src)
+					img.onload = function(){
+						$('.canvas').css({'background':'url('+src+') no-repeat 0 0'});
+						//console.log(img.naturalWidth+'px '+img.naturalHeight+'px');
+					  	$('.canvas').css({'backgroundSize':''+img.naturalWidth+'px '+img.naturalHeight+'px'});
+						bgSizeX = img.naturalWidth;
+						bgSizeY = img.naturalHeight;
+						var cas = $('.preview')[0];
+						var ctx = cas.getContext('2d');
+						console.log(bgPositionX+','+bgPositionY+','+bgSizeX+','+bgSizeY);
+						ctx.fillStyle="#ffffff";//白色为例子；
+						ctx.fillRect(0,0,300,300);
+						ctx.drawImage(img,bgPositionX,bgPositionY,img.naturalWidth,img.naturalHeight);
+					}
+				}
+			}
+		});
+	</script>
+	<!-- 图片外容器 -->
+	<script type="text/javascript">
+		var roateX = function(){
+
+		};
+		var resize = function (type) {
+			var canvas = $('.canvas')[0];
+			var backgroundSize = window.getComputedStyle(canvas)['backgroundSize'].split(' ');
+			bgSizeX = getInteger(backgroundSize[0]);
+			bgSizeY = getInteger(backgroundSize[1]);
+			if(type == '+'){
+				canvas.style['backgroundSize'] = ''+(bgSizeX*1.05)+'px '+(bgSizeY*1.05)+'px';
+			}else if(type == '-'){
+				canvas.style['backgroundSize'] = ''+(bgSizeX*0.95)+'px '+(bgSizeY*0.95)+'px';
+			}else{
+				alert('你特么写错了~');
+			}
+			var cas = $('.preview')[0];
+			var ctx = cas.getContext('2d');
+			ctx.fillStyle="#ffffff";//白色为例子；
+			ctx.fillRect(0,0,300,300);
+			ctx.drawImage(img,bgPositionX,bgPositionY,bgSizeX,bgSizeY);
+		};
+
+
+		var bgSizeX = 0,//缩放后的图片尺寸X
+			bgSizeY = 0,//缩放后图片的尺寸Y
+			bgPositionX = 0,//拖放后图片的位置X
+			bgPositionY = 0;//拖放后图片的位置Y
+		var img = new Image();
+		function convertCanvasToImage(canvas) {
+		  var image = new Image();
+		  image.src = canvas.toDataURL("image/png");
+		  return image;
+		}
+
+		//获取英文
+		var getInteger = function(str){
+			return 1*(str.slice(0,-2));
+		};
+
+		$(function(){
+			var canvas = $('.canvas')[0];
+			canvas.addEventListener('touchstart',function(evt){
+				if(evt.touches.length == 1){
+					var oX = evt.touches[0].clientX;
+					var oY = evt.touches[0].clientY;
+					var move = function(evt){
+						evt.preventDefault();
+						var nX = evt.targetTouches[0].clientX;
+						var nY = evt.targetTouches[0].clientY;
+						var ofX = nX-oX;
+						var ofY = nY-oY;
+						var bgX = getInteger(window.getComputedStyle(canvas)['backgroundPositionX']);
+						var bgY = getInteger(window.getComputedStyle(canvas)['backgroundPositionY']);
+
+						canvas.style.backgroundPositionX = bgX + ofX + 'px';
+						canvas.style.backgroundPositionY = bgY + ofY + 'px';
+						console.log(bgX+','+bgY);
+						oX = evt.targetTouches[0].clientX;
+					    oY = evt.targetTouches[0].clientY;
+						var cas = $('.preview')[0];
+						var ctx = cas.getContext('2d');
+						ctx.fillStyle="#ffffff";//白色为例子；
+						ctx.fillRect(0,0,300,300);
+						bgPositionX = bgX + ofX;
+						bgPositionY = bgY + ofY;
+						console.log((bgX + ofX)+','+(bgY + ofY)+','+bgSizeX+','+bgSizeY);
+						ctx.drawImage(img,bgPositionX,bgPositionY,bgSizeX,bgSizeY);
+						convertCanvasToImage();
+					}
+
+					var end = function(evt){
+						canvas.removeEventListener('touchmove',move);
+
+					}
+					canvas.addEventListener('touchmove',move);
+					canvas.addEventListener('touchend',end);
+
+
+				}
+				else if(evt.touches.length ==2){
+					var oX1 = evt.touches[0].clientX;
+					var oY1 = evt.touches[0].clientY;
+
+					var oX2 = evt.touches[1].clientX;
+					var oY2 = evt.touches[1].clientY;
+
+					var oLength = Math.sqrt(Math.pow((oX2-oX1),2)+Math.pow((oY2-oY1),2));
+
+					var move = function(evt){
+						evt.preventDefault();
+						var nX1 = evt.targetTouches[0].clientX;
+						var nY1 = evt.targetTouches[0].clientY;
+
+						var nX2 = evt.targetTouches[1].clientX;
+						var nY2 = evt.targetTouches[1].clientY;
+
+						var ofX1 = nX1-oX1;
+						var ofY1 = nY1-oY1;
+
+						var ofX2 = nX2-oX2;
+						var ofY2 = nY2-oY2;
+
+						var nLength = Math.sqrt(Math.pow((nX2-nX1),2)+Math.pow((nY2-nY1),2));
+						var scaleSize = Math.sqrt(ofX1*ofX1+ofY1*ofY1)+Math.sqrt(ofX2*ofX2+ofY2*ofY2);
+						//console.log('jjhjjj'+window.getComputedStyle(canvas)['backgroundSize'].split(' '));
+						var backgroundSize = window.getComputedStyle(canvas)['backgroundSize'].split(' ');
+						var bgSizeX = getInteger(backgroundSize[0]);
+						var bgSizeY = getInteger(backgroundSize[1]);
+ 
+						if(((ofX1<0&&ofX2>0)||(ofX1>0&&ofX2<0))&&((ofY1<0&&ofY2>0)||(ofY1>0&&ofY2<0))){
+							$('.log').text('ofX1='+ofX1+',ofY1='+ofY1+',ofX2='+ofX2+',ofY2='+ofY2);
+							if(nLength-oLength>0){
+								//$('.log1').text('我被放大了');
+								canvas.style['backgroundSize'] = ''+(bgSizeX*1.05)+'px '+(bgSizeY*1.05)+'px';
+
+							}else{
+								//$('.log1').text('我被缩小了');
+								canvas.style['backgroundSize'] = ''+(bgSizeX*0.95)+'px '+(bgSizeY*0.95)+'px';
+							}
+						}
+
+
+						 oX1 = evt.targetTouches[0].clientX;
+						 oY1 = evt.targetTouches[0].clientY;
+
+						 oX2 = evt.targetTouches[1].clientX;
+						 oY2 = evt.targetTouches[1].clientY;
+
+						
+					}
+
+					var end = function(evt){
+						canvas.removeEventListener('touchmove',move);
+						var bgX = getInteger(window.getComputedStyle(canvas)['backgroundPositionX']);
+						var bgY = getInteger(window.getComputedStyle(canvas)['backgroundPositionY']);
+					}
+					canvas.addEventListener('touchmove',move);
+					canvas.addEventListener('touchend',end);
+				}else{
+					return;
+				}
+
+			});
+		});
+
+	</script>
+</body>
+</html>

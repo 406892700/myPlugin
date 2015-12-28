@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+    <title>新的上传</title>
+    <style>
+        html{
+            font-size:62.5%;
+        }
+
+        body{
+            font-size:1.2rem;
+            font-family: 'Microsoft Yahei';
+            text-align: center;
+            margin:0px;
+            padding: 0px;
+            
+        }
+
+        *{
+            padding:0px;
+            margin:0px;
+        }
+
+        #file{
+
+        }
+        #canvasWrap{
+            border:1px solid #Aaa;
+            height:320px;
+        }
+        #canvas{
+            border:1px solid #Aaa;
+        }
+
+        #plus,#minu,#getImg{
+            border:none;
+            background-color: #0078d8;
+            width:100px;
+            height:30px;
+            line-height: 30px;
+            color:#fff;
+            font-size:2.0rem;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="file"/>
+    <div id="canvasWrap">
+        <canvas id="canvas"></canvas>
+    </div>
+    <button id="plus">+</button>
+    <button id="minu">-</button>
+    <button id="getImg">下载图片</button>
+    <script src="http://jsconsole.com/remote.js?B2492BDD-5730-4EB9-816D-C8D2085FABE1"></script>
+    <script>
+        var util = (function () {
+            return {
+                get: function (id) {
+                  return document.getElementById(id);
+                }
+            }
+        })();
+
+        var UnloadCanvas = (function(window,$,undefined){
+            function UnloadCanvas(wrap,file,canvas){
+                this.wrap = wrap;
+                this.file = file;
+                this.canvas = canvas;
+            }
+
+
+            UnloadCanvas.prototype = {
+                contructor:UnloadCanvas,
+                ifLoadflag:false,
+                one:1,
+                args:{
+                    cWidth:0,
+                    cHeight:0,
+                    imgWidth:0,
+                    imgHeight:0,
+                    context:{},
+                    imgLeft:0,
+                    imgTop:0,
+                    imgObj:{}
+                },
+                init : function (callback) {
+                    this._initShape()._initFile();
+                    callback();
+                },
+                _initShape: function () {//初始化形状
+                    //让canvas适应外容器 start
+                    this.args.cWidth = getComputedStyle(this.wrap)['width'].slice(0,-2);
+                    this.args.cHeight = getComputedStyle(this.wrap)['height'].slice(0,-2);
+                    this.args.context = this.canvas.getContext('2d');
+
+                    this.canvas.setAttribute('width', this.args.cWidth);
+                    this.canvas.setAttribute('height', this.args.cHeight);
+                    //让canvas适应外容器 end
+                    return this;
+                },
+                _initFile: function () {//初始化图片上传
+                    var that = this;
+                    this.file.addEventListener('change', function (evt) {//为图片上传注册事件
+                        /*清除上一次的部分参数更改*/
+                        that.args.imgLeft = 0;
+                        that.args.imgTop = 0;
+                        var fr = new FileReader();
+                        var file = evt.target.files[0];
+                        if(!file){
+                            return;
+                        }
+                        if(!/image\/\w+/.test(file.type)){
+                            console.log('请上传图片！');
+                            return;
+                        }
+
+                        fr.readAsDataURL(file);
+                        fr.onload = function (evt) {
+                            var img = new Image();
+                            img.src = evt.target.result;
+                            that.args.imgObj = img;
+                            that.args.imgWidth = img.width;
+                            that.args.imgHeight = img.height;
+                            that._drawImage();
+                            that.ifLoadflag = true;
+                            if(that.one == 1){
+                                that._drag();
+                                that.one = 0;
+                            }
+
+                        };
+                    });
+                    return this;
+                },
+                _drawImage: function () {
+                    var that = this;
+                    var ctx = that.args.context;
+                    var clearWidth = this.args.cWidth;
+                    var clearHeight = this.args.cHeight;
+                    ctx.fillStyle="#FFF";
+                    ctx.fillRect(0,0,clearWidth,clearHeight);
+                    ctx.drawImage(that.args.imgObj,that.args.imgLeft,that.args.imgTop,that.args.imgWidth,that.args.imgHeight);
+                },
+                _drag : function () {//初始化拖放
+                    var that = this;
+                    if(!that.ifLoadflag){
+                        return;
+                    }
+                    this.canvas.addEventListener('touchstart', function (evt) {
+                        var sTouch = evt.touches[0];
+                        var oX = sTouch.pageX;
+                        var oY = sTouch.pageY;
+                        var move = function (evt) {
+                            var mTouch = evt.touches[0];
+                            var nX = mTouch.pageX;
+                            var nY = mTouch.pageY;
+                            var offsetX = nX-oX;
+                            var offsetY = nY-oY;
+                            that.args.imgLeft += offsetX;
+                            that.args.imgTop += offsetY;
+                            that._drawImage();
+                            oX = nX;
+                            oY = nY;
+                        };
+                        var end = function(evt){
+                            that.canvas.removeEventListener('touchmove',move);
+                            that.canvas.removeEventListener('touchend',end);
+                        };
+
+                        that.canvas.addEventListener('touchmove',move);
+                        that.canvas.addEventListener('touchend',end);
+                    });
+
+                    return this;
+                },
+                resize : function (type) {//初始化重新更改大小
+                    var that = this;
+                    if(!that.ifLoadflag){
+                        return;
+                    }
+                    if(type == '+'){
+                        that.args.imgWidth = that.args.imgWidth*1.05;
+                        that.args.imgHeight = that.args.imgHeight*1.05;
+                    }else if(type == '-'){
+                        that.args.imgWidth = that.args.imgWidth*0.95;
+                        that.args.imgHeight = that.args.imgHeight*0.95;
+                    }
+                    that._drawImage();
+                },
+
+                rotate : function () {//初始化选装图片
+                    var that = this;
+                    var ctx = that.args.context;
+                    var clearWidth = that.args.cWidth;
+                    var clearHeight = that.args.cHeight;
+                    ctx.fillStyle="#FFF";
+                    ctx.fillRect(0,0,clearWidth,clearHeight);
+                    ctx.translate(that.args.imgWidth/2,that.args.imgHeight/2);
+                    ctx.rotate(90*Math.PI/180);
+                    ctx.drawImage(that.args.imgObj,that.args.imgLeft,that.args.imgTop,that.args.imgWidth,that.args.imgHeight);
+                    ctx.rotate(270*Math.PI/180);
+                },
+
+                getImage : function () {//转换图片
+                    var that = this;
+                    if(!that.ifLoadflag){
+                        return;
+                    }
+                    var pic = that.canvas.toDataURL('image/png');
+                    window.location.href = pic;
+                }
+
+            };
+
+            return UnloadCanvas;
+
+        })(window);
+
+        window.addEventListener('DOMContentLoaded', function () {
+            var wrap = util.get('canvasWrap');
+            var file = util.get('file');
+            var canvas = util.get('canvas');
+            var upload = new UnloadCanvas(wrap,file,canvas);
+            upload.init(function () {
+                util.get('plus').onclick = function () {
+                    upload.rotate();
+                };
+                util.get('minu').onclick = function () {
+                    upload.resize('-');
+                };
+
+                util.get('getImg').onclick = function () {
+                    upload.getImage();
+                }
+
+            });
+
+        })
+    </script>
+</body>
+</html>

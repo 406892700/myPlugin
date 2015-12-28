@@ -1,0 +1,26 @@
+.xRangeWrap{
+    position: relative;
+    /*background-color: rgb(66,137,141);*/
+    background-color:rgb(106,111,150);
+    height: 10px;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.xRangeWrap > .xPercent{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    width: 0;
+    height: 100%;
+    background-color: rgb(66,137,141);
+}
+
+.xRangeWrap > .slide_btn{
+    width:8px;
+    height: 16px;
+    background-color: rgb(66,137,141);
+    display: block;
+    position: absolute;
+    top:-3px;
+    left:0;
+}

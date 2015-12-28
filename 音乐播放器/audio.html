@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>播放</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <link rel="stylesheet" href="/html5/audio/res/xaudio.css"/>
+    <style>
+        html{
+            font-size:62.5%;
+        }
+
+        body{
+            font-size:1.2rem;
+        }
+    </style>
+
+</head>
+<body>
+<audio src="html5/audio/1.mp3" controls="controls" id="test">
+    Your browser does not support the audio element.
+</audio>
+
+
+
+<div class="x_audio">
+    <div class="left_icon">
+        <a href="javascript:void(0)" class="icon_audio"></a>
+    </div>
+    <div class="right_progress">
+        <div class="pro_bar"></div>
+        <a href="javascript:void(0)" class=""></a>
+    </div>
+    <div class="x_time">
+        -04:01:30
+    </div>
+</div>
+
+
+<div class="wrap">
+
+</div>
+
+<div class="wrap1">
+
+</div>
+
+<script src="util/xQuery.js"></script>
+<script src="html5/audio/xAudio.js"></script>
+<script>
+    $(function () {
+        window.audiox = xAudio('html5/audio/1.mp3',$('.wrap'));
+        window.audiox1 = xAudio('html5/audio/1.mp3',$('.wrap1'));
+    });
+//    (function (window) {
+//        var Audio = function () {
+//
+//        }
+//    })(window,xQuery);
+</script>
+</body>
+</html>

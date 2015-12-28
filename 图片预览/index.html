@@ -1,0 +1,175 @@
+﻿<!doctype html>
+<html lang="ch-ZN">
+<head>
+    <meta charset="UTF-8">
+    <title>图片预览</title>
+    <script type="text/javascript" src="../jquery-1.8.3.min.js"></script>
+    <style type="text/css">
+        *{
+            padding:0px;
+            margin:0px;
+        }
+        body{
+            margin:0px;
+            padding:0px;
+            text-align: center;
+            padding:50px;
+        }
+
+        .imgContent{
+            position: relative;
+        }
+
+        .imgWrap{
+            width:420px;
+            height: 420px;
+        }
+
+        .imgWrap > img{
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .imgWrap > .fly_div{
+            width:220px;
+            height: 220px;
+            background-color: #000;
+            /*border:1px solid #d1d1d1;*/
+            /*opacity:0.3;
+            filter:alpha(opacity=0.3);*/
+            position: absolute;
+            left:0px;
+            top:0px;
+            cursor:move;
+            display: none;
+            background: url('http://gtms01.alicdn.com/tps/i4/T12pdtXaldXXXXXXXX-2-2.png') repeat 0 0 ;
+        }
+
+        .preview{
+            width:420px;
+            height: 420px;
+            position: absolute;
+            left:-600px;
+            top:0px;
+            overflow: hidden;
+        }
+
+        .preview > img{
+            position: absolute;
+            left:0px;
+            top:0px;    
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="imgContent">
+    <div class="imgWrap">
+        <img src="http://img.alicdn.com/bao/uploaded/i4/TB1CSFvHVXXXXcGXVXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg" alt="">
+        <div class="fly_div"></div>
+    </div>
+
+    <div class="preview">
+        <img src="http://img.alicdn.com/bao/uploaded/i4/TB1CSFvHVXXXXcGXVXXXXXXXXXX_!!0-item_pic.jpg" alt="">
+    </div>
+</div>
+
+<script type="text/javascript">
+    var addId = function(obj){
+        obj = $(obj);
+        var timeStamp = new Date().getTime();
+        var id = "id_"+ timeStamp;
+        obj.attr('id',id);
+        return id;
+    }
+
+    var getPosition = function(obj){
+        return {
+            left:$(obj).css('left').slice(0,-2)*1,
+            top:$(obj).css('top').slice(0,-2)*1
+        };
+    }
+
+    var inRange = function(range,value){
+        var min = range.min,
+            max = range.max;
+        if(value < min)
+            return min;
+        else if(value > max)
+            return max;
+        else
+            return value;
+    }
+
+
+    var changePosition = function(position,obj){
+        var left = position.left;
+        var top = position.top;
+        var ratio = 420/220;
+
+        obj.css({'left':-left*ratio+'px','top':-top*ratio+'px'});
+    }
+
+    var imgWrap = $('.imgWrap'),
+        flyDiv = $('.fly_div'),
+        preWrap = $('.preview'),
+        preImg = $('.preview > img');
+
+        var flyId = addId(flyDiv);
+
+
+    imgWrap.mousemove(function(evt){
+        flyDiv.css('display','block');
+        preWrap.css({'left':'430px'});
+        if(evt.target.id != flyId){
+             flyDiv.css({'left':evt.offsetX-110+'px','top':evt.offsetY-110+'px'});
+        }
+        else{
+            var position = getPosition(evt.target);
+            flyDiv.css({'left':evt.offsetX+position.left-110+'px','top':evt.offsetY+position.top-110+'px'});
+        }
+
+       var position =  getPosition(flyDiv);
+       var rangex = {'min':0,'max':imgWrap.width()-flyDiv.width()};
+       var rangey = {'min':0,'max':imgWrap.height()-flyDiv.height()};
+       var left  = inRange(rangex,position.left);
+       var top  = inRange(rangey,position.top);
+       flyDiv.css({'left':left+'px','top':top+'px'});
+
+       changePosition(getPosition(flyDiv),preImg);   
+    });
+
+
+    imgWrap.mouseleave(function(evt){
+        flyDiv.css('display','none');
+        preWrap.css('left','-600px');
+    });
+
+
+
+    ;(function(global,$){
+        $.fn.preview = function(option){
+            var that = this;
+            default_opt = {
+                sPic:'http://img.alicdn.com/bao/uploaded/i4/TB1CSFvHVXXXXcGXVXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg',
+                lPic:'http://img.alicdn.com/bao/uploaded/i4/TB1CSFvHVXXXXcGXVXXXXXXXXXX_!!0-item_pic.jpg'
+            };
+
+            function preview(){
+
+            }
+
+            preview.fn = preview.prototype = {
+                constructor:preview,
+                flyDiv:$('<div class="fly_div"></div>'),
+            }
+
+            option = $.extend({},default_opt,option);
+        }
+    })(window,jQuery);
+    
+</script>
+</body>
+</html>

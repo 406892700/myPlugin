@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1 user-scalable=0"/>
+    <link rel="shortcut icon" href="img/logo.png">
+    <title>html5 audio音频播放</title>
+    <style>
+        *{ margin: 0; padding:0;}
+        body{-webkit-tap-highlight-color: rgba(0,0,0,0); font-family: "微软雅黑"}
+        h1{ width: 100%; font-size: 1.5em; text-align: center; line-height: 3em; color:#47c9af; }
+        #audio{ width: 100%;}
+        #control{ width: 150px; height: 150px; line-height: 150px; text-align: center; border-radius: 200px; border:none; color:#fff; margin-top: -75px; margin-left:-75px; left:50%; top:50%; position: absolute; box-shadow: #888 0 0 8px;}
+        .color_gray{ background: #e4e4e4}
+        .hide{ display: none;}
+        .show{ display: block;}
+        .play{ background:  #f06060;}
+        .pause{ background:skyblue}
+        /*进度条样式*/
+        .progressBar{ width: 100%; height: 10px;margin: 30px auto 30px auto; position:absolute; left: 0; bottom: 35px;}
+        .progressBar div{ position: absolute;}
+        .progressBar .progressBac{ width: 100%; height: 10px;  left: 0; top:0; background: #e4e4e4;}
+        .progressBar .speed{width: 100%; height: 10px; left: -100%; background: #f06060; }
+        .progressBar .drag{ width: 30px; height: 30px; left: 0; top:-10px;  background: skyblue; opacity: 0.8; border-radius: 50px; box-shadow: #fff 0 0 5px;}
+        /*时间样式*/
+        #time{ width: 100%; height: 20px;position: absolute; left: 0; bottom:30px; color:#888;}
+        .tiemDetail{ position: absolute; right:10px; top:0;}
+        #songInfo{overflow: hidden; width: 200px; height:50px; line-height: 50px; text-align: center; color:#34495e;   margin-top: -25px; margin-left:-100px; left:50%; top:70%; position: absolute;}
+        .shareImg{ position: absolute; left: 100000px;}
+    </style>
+
+    <script src="javascripts/zepto.min.js"></script>
+</head>
+
+<body>
+<script>
+    $(function() {
+        getSong();
+    })
+
+    //获取歌曲链接并插入dom中
+    function getSong() {
+        var audio = document.getElementById("audio");
+        audio.src = "http://frontman.qiniudn.com/songnotime.mp3";
+        audio.loop = true; //歌曲循环
+        playCotrol(); //播放控制函数
+
+    }
+
+    //点击播放/暂停
+    function clicks() {
+        var audio = document.getElementById("audio");
+        $("#control").click(function() {
+            if ($("#control").hasClass("play")) {
+                $("#control").addClass("pause").removeClass("play");
+                audio.play();//开始播放
+                dragMove();//并且滚动条开始滑动
+                $("#control").html("暂停播放");
+            } else {
+                $("#control").addClass("play").removeClass("pause");
+                $("#control").html("点击播放");
+                audio.pause();
+            }
+        })
+    }
+
+    //播放时间
+    function timeChange(time, timePlace) {//默认获取的时间是时间戳改成我们常见的时间格式
+        var timePlace = document.getElementById(timePlace);
+        //分钟
+        var minute = time / 60;
+        var minutes = parseInt(minute);
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+        //秒
+        var second = time % 60;
+        seconds = parseInt(second);
+        if (seconds < 10) {
+            seconds = "0" + seconds;
+        }
+        var allTime = "" + minutes + "" + ":" + "" + seconds + ""
+        timePlace.innerHTML = allTime;
+    }
+
+    //播放事件监听
+    function playCotrol() {
+        audio.addEventListener("loadeddata", //歌曲一经完整的加载完毕( 也可以写成上面提到的那些事件类型)
+                function() {
+                    $("#control").addClass("play").removeClass("color_gray");
+                    $("#control").html("点击播放");
+                    addListenTouch(); //歌曲加载之后才可以拖动进度条
+                    var allTime = audio.duration;
+                    timeChange(allTime, "allTime");
+                    setInterval(function() {
+                        var currentTime = audio.currentTime;
+                        $("#time .currentTime").html(timeChange(currentTime, "currentTime"));
+                    }, 1000);
+                    clicks();
+                }, false);
+
+        audio.addEventListener("pause",
+                function() { //监听暂停
+                    $("#control").addClass("play").removeClass("pause");
+                    $("#control").html("点击播放");
+                    if (audio.currentTime == audio.duration) {
+                        audio.stop();
+                        audio.currentTime = 0;
+                    }
+                }, false);
+        audio.addEventListener("play",
+                function() { //监听暂停
+                    $("#control").addClass("pause").removeClass("play");
+                    $("#control").html("暂停播放");
+                    dragMove();
+                }, false);
+        audio.addEventListener("ended", function() {
+            alert(0)
+        }, false)
+    }
+
+    //进度条
+    //这里我用的是事件实现进度拖动 如果不太熟悉touch的可以看下我之前写的一个小demo http://www.cnblogs.com/leinov/p/3701951.html
+    var startX, x, aboveX = 0; //触摸时的坐标 //滑动的距离  //设一个全局变量记录上一次内部块滑动的位置
+
+    //1拖动监听touch事件
+    function addListenTouch() {
+        document.getElementById("drag").addEventListener("touchstart", touchStart, false);
+        document.getElementById("drag").addEventListener("touchmove", touchMove, false);
+        document.getElementById("drag").addEventListener("touchend", touchEnd, false);
+        var drag = document.getElementById("drag");
+        var speed = document.getElementById("speed");
+    }
+
+    //touchstart,touchmove,touchend事件函数
+    function touchStart(e) {
+        e.preventDefault();
+        var touch = e.touches[0];
+        startX = touch.pageX;
+    }
+    function touchMove(e) { //滑动
+        e.preventDefault();
+        var touch = e.touches[0];
+        x = touch.pageX - startX; //滑动的距离
+        //drag.style.webkitTransform = 'translate(' + 0+ 'px, ' + y + 'px)';  //也可以用css3的方式
+        drag.style.left = aboveX + x + "px"; //
+        speed.style.left = -((window.innerWidth) - (aboveX + x)) + "px";
+    }
+    function touchEnd(e) { //手指离开屏幕
+        e.preventDefault();
+        aboveX = parseInt(drag.style.left);
+        var touch = e.touches[0];
+        var dragPaddingLeft = drag.style.left;
+        var change = dragPaddingLeft.replace("px", "");
+        numDragpaddingLeft = parseInt(change);
+        var currentTime = (numDragpaddingLeft / (window.innerWidth - 30)) * audio.duration;//30是拖动圆圈的长度，减掉是为了让歌曲结束的时候不会跑到window以外
+        audio.currentTime = currentTime;
+    }
+    //3拖动的滑动条前进
+    function dragMove() {
+        setInterval(function() {
+            drag.style.left = (audio.currentTime / audio.duration) * (window.innerWidth - 30) + "px";
+            speed.style.left = -((window.innerWidth) - (audio.currentTime / audio.duration) * (window.innerWidth - 30)) + "px";
+        }, 500);
+    }
+</script>
+
+<h1>html5 audio 音频播放demo</h1>
+
+<!--audiostart-->
+<audio id="audio" src=""  loop="loop" autoplay="autoplay" ></audio>
+<!--audio End-->
+
+
+
+<!--播放控制按钮start-->
+<button id="control" class="">loading</button>
+<!--播放控制按钮end-->
+
+<!--时间进度条块儿start-->
+<section class="progressBar">
+    <div class="progressBac"></div>
+    <div class="speed" id="speed"></div>
+    <div class="drag" id="drag"></div>
+</section>
+<!--时间进度条块儿end-->
+
+<!--播放时间start-->
+<div id="time"><div class="tiemDetail"><span class="currentTime" id="currentTime">00:00</span>/<span class="allTime" id="allTime">00:00</span></div></div>
+<!--播放时间end-->
+<!--歌曲信息start-->
+<div id="songInfo">没时间-Leinov<div class="shareImg"><img src="img/html5audio.jpg" alt=""></div></div>
+<!--歌曲信息end-->
+</body>
+</html>

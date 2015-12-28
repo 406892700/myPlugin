@@ -1,0 +1,257 @@
+﻿html{
+	font-size:62.5%;
+	font-family:'Microsoft Yahei';
+}
+
+body{
+	text-align: center;
+	margin:-1px 0px 0px 0px;
+	padding-top: 1px;
+	padding-bottom: 55px;
+	background-color: #efeff4;
+}
+/*清浮动*/
+.clearfix{
+	clear: both;
+}
+
+/*一些颜色*/
+.yellow{
+	color:#3fc5aa;
+}
+
+/*重置一些样式*/
+*{padding:0px;outline: none;margin: 0px;}
+a{text-decoration: none;}
+ul{list-style: none;margin:0px;padding:0px;}
+
+/*邀请规则*/
+.inviteRule{
+	margin-top: 30px;
+}
+
+.inviteRule > header{
+	background-color: #e1e1e1;
+	color:#3fc5aa;
+	font-size: 1.8rem;
+	height: 35px;
+	line-height: 35px;
+}
+
+.inviteRule > .bd{
+	font-size: 1.6rem;
+	color:#666666;
+	text-align: left;
+	padding: 0px 15px;
+}
+
+.inviteRule > .bd > p{
+	line-height: 2.5rem;
+	margin-top: 5px;
+}
+
+/*邀请结果*/
+.inviteHeader{
+	padding:0px 15px;
+}
+
+.inviteHeader > header{
+	color:#3fc5aa;
+	font-size: 1.6rem;
+	padding:10px 0px;
+}
+
+.inviteHeader > .bd{
+	color:#fff;
+	display: table;
+	padding:20px 10px;
+	border-radius: 5px;
+	width: 100%;
+	box-sizing:border-box;
+}
+
+.inviteHeader > .bd > span{
+	display: table-cell;
+	vertical-align: middle;
+	line-height: 3rem;
+	font-size: 1.8rem;
+}
+
+.inviteHeader.grade1 > .bd{
+	background-color: #3fc3fe;
+}
+
+.inviteHeader.grade1 > header{
+	color:#3fc3fe;
+}
+
+.inviteHeader.grade2 > .bd{
+	background-color: #3fc5aa;
+}
+
+.inviteHeader.grade2 > header{
+	color:#3fc5aa;
+}
+
+.inviteHeader.grade3 > .bd{
+	background-color: #ff8c35;
+}
+
+.inviteHeader.grade3 > header{
+	color:#ff8c35;
+}
+
+.inviteHeader.grade4 > .bd{
+	background-color: #fe4848;
+}
+
+.inviteHeader.grade3 > header{
+	color:#fe4848;
+}
+
+/*邀请排行榜*/
+.inviteTop{
+	padding:0px 15px;
+	margin-top: 15px;
+}
+
+.inviteTop > header{
+	color:#333;
+	font-size: 1.5rem;
+	height: 40px;
+	line-height: 40px;
+	border-top: 1px solid #d1d1d1;
+}
+
+.inviteTop > .bd{
+	background-color: #fff;
+	border-radius: 10px;
+	border:1px solid #e8e8e8;
+	padding:10px 5px;
+}
+
+.inviteTop > .bd > .item{
+	margin: 10px 0px;
+	display: table;
+	width: 100%;
+}
+
+.inviteTop > .bd > .item > div{
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.inviteTop > .bd > .item > .index{
+	width:45px;
+	font-size: 1.5rem;
+}
+
+.inviteTop > .bd > .item > .name{
+	padding-left: 10px;
+	text-align: left;
+	font-size: 1.5rem;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+
+.inviteTop > .bd > .item > .user{
+	width: 45px;
+}
+
+.inviteTop > .bd > .item > .user img{
+	width: 100%
+}
+
+.inviteTop > .bd > .item > .number{
+	width: 100px;
+	text-align: right;
+	padding-right: 10px;
+	font-size: 1.5rem;
+}
+
+.inviteTop > .bd > .item > .index > span{
+	display: inline-block;
+	width: 22px;
+	height: 22px;
+	border-radius: 22px;
+	color:#333;
+	line-height: 22px;
+	font-size: 1.6rem;
+	text-align: center;
+	font-weight: bold;
+}
+
+.inviteTop > .bd > .item > .index > span.no1{
+	border: 4px solid #ffd01f;
+	box-shadow: 0px 0px 2px #d00000;
+	color:#e3583f;
+	background:-webkit-linear-gradient(top,#fffef7,#dbd5cd);
+}
+
+.inviteTop > .bd > .item > .index > span.no2{
+	border: 4px solid #e8e8e8;
+	box-shadow: 0px 0px 2px #aaa;
+	color:#e3583f;
+	background:-webkit-linear-gradient(top,#fffef7,#dbd5cd);
+}
+
+.inviteTop > .bd > .item > .index > span.no3{
+	border: 4px solid #b55b1a;
+	box-shadow: 0px 0px 2px #ffa617;
+	color:#e3583f;
+	background:-webkit-linear-gradient(top,#fffef7,#dbd5cd);
+}
+
+.invite_share{
+
+}
+
+.invite_share > header{
+	color:#fe4848;
+	font-size: 1.8rem;
+	height: 30px;
+	line-height: 30px;
+	margin-top: 5px;
+}
+
+.invite_share > a{
+	display: block;
+	margin:10px 0px ;
+	background-color: #3fc5aa;
+	height: 45px;
+	line-height: 45px;
+	color:#fff;
+	font-size: 1.8rem;
+	text-align: center;
+	border-radius: 5px;
+}
+
+.invite_share > a.disabled{
+	background-color: #d1d1d1;
+	color:#999999;
+	cursor:not-allowed;
+}
+
+
+.show_loading{
+	background-color: rgba(0,0,0,0.8);
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	left:0px;
+	top:0px;
+	display:none;
+}
+
+.show_loading > .tips_content{
+	width:60px;
+	height: 80px;
+	background: url('./images/gif.gif') no-repeat 0 0;
+	background-size: 60px 80px;
+	position: absolute;
+	left:50%;
+	top:50%;
+	margin-left:-30px;
+	margin-top: -40px;
+}
