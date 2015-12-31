@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>tips</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="./mobileTips.css">
+</head>
+<body>
+
+	<a id="xx" href="javascript:void(0)">Alert点击</a>
+
+	<a id="yy" href="javascript:void(0)">Confirm点击</a>
+	
+	<script type="text/javascript" src="./xQuery.js"></script>
+	<script type="text/javascript" src="./mobileTips.js"></script>
+	<script src="./fastclick.js"></script>
+	<script type="text/javascript">
+		var x = document.getElementById('xx');
+		var y = document.getElementById('yy');
+		x.addEventListener('click',function(evt){
+			$.Alert('3233','呵呵',function(){$.Alert(1)});
+		});
+
+		y.addEventListener('click',function(evt){
+			$.Confirm('3233',{doneText:'呵呵',doneCallback:function(){alert(1);},cancelText:'退出',cancelCallback:function(){alert('退出');}});
+		});
+	</script>
+</body>
+</html>
