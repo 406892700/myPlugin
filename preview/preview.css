@@ -1,0 +1,27 @@
+._fly_div{
+    position: absolute;
+    left:0;
+    top:0;
+    width:200px;
+    height: 200px;
+    background: url('/staticImages/dotted.png') repeat 0 0;
+    display: none;
+    cursor: move;
+}
+
+._preview_div{
+    position: absolute;
+    top:0px;
+    border:1px solid #dcdcdc;
+    width:400px;
+    height:400px;
+    display: none;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+._preview_div > img{
+    position: absolute;
+    left:0px;
+    top:0px;
+}

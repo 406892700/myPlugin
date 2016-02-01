@@ -1,0 +1,50 @@
+/*文字轮播样式*/
+.lottery_slide{
+    position: relative;
+}
+
+.slide_text_title{
+    position: absolute;
+    width: 100%;
+    color:#d83838;
+    font-size: 1.6rem;
+    height:50px;
+    line-height: 50px;
+    left:0;
+    top:0;
+}
+
+.slide_text_title > img{
+    width:70%;
+    display:block;
+    margin:0px auto;
+}
+
+.lottery_slide > .innerWrap{
+    overflow:hidden;
+    height:60%;
+    position: absolute;
+    left: 5%;
+    width: 90%;
+    top: 50px;
+}
+
+.lottery_slide > .slideBoard{
+
+}
+
+.lottery_slide .slideBoard table{
+    width:100%;
+    font-size:1.6rem;
+    color:#d83838;
+}
+
+.lottery_slide .slideBoard  td {
+    padding:5px;
+    vertical-align: top;
+}
+
+.lottery_slide .slideBoard  td.s_left{
+    text-align: left;
+    padding:0px 10px;
+}

@@ -1,0 +1,30 @@
+._icon_preview{
+    display: block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right:0;
+    bottom:0;
+    background: url('/staticImages/iconfont-fangdajing.png') no-repeat 50% 50%;
+    background-size:15px 15px;
+    background-color: #eee;
+    border-top-left-radius: 2px;
+    z-index:9;
+}
+
+._preview_mask{
+    position: fixed;
+    background: url('/staticImages/opacity_50.png') repeat 0 0;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left:0;
+    z-index:99999999;
+}
+
+._preview_mask > ._img_wrap{
+    position: absolute;
+    text-align: center;
+    left:50%;
+    top:50%;
+}
